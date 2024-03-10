@@ -54,6 +54,7 @@ func main() {
 			fmt.Println("找到表：" + cacheTableClass.SqlTableName)
 			//插入表名等信息
 			columnIndex := 'B'	//rune
+			//rowIndex = rowIndex + 1
 			f.SetCellValue(sheetName, string(columnIndex) + strconv.Itoa(rowIndex), cacheTableClass.SqlTableName)	//B2
 			columnIndex = columnIndex + 1
 			f.SetCellValue(sheetName, string(columnIndex) + strconv.Itoa(rowIndex), cacheTableClass.Description)	//C2
@@ -75,7 +76,6 @@ func main() {
 				f.SetCellValue(sheetName, string(columnIndex) + strconv.Itoa(rowIndex), property.PointerTable)	//N2
 				rowIndex = rowIndex + 1
 			}
-			rowIndex = rowIndex + 1
 		}
 		// 设置工作簿的默认工作表
 		f.SetActiveSheet(sheetIndex)

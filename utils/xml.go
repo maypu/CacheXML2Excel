@@ -41,14 +41,17 @@ func ReadXml(path string) CacheTableClass {
 	cacheTableClass.SqlTableName = cacheTableClassName
 	//描述
 	if classDescription := cacheClass.SelectElement("Description"); classDescription != nil {
-		cacheTableClass.Description = classDescription.Text()
+		classDesc := classDescription.Text()
+		classDesc = strings.TrimPrefix(classDesc, "\n")
+		classDesc = strings.TrimSuffix(classDesc, "\n")
+		classDesc = strings.TrimSpace(classDesc)
+		cacheTableClass.Description = classDesc
 	}
 	//计算表描述
 	extractTableDesc := ExtractTableDesc(cacheTableClass.Description)
 	if extractTableDesc != "" {
 		cacheTableClass.Description = extractTableDesc
 	}
-
 	for _, property := range cacheClass.SelectElements("Property") {
 
 		if cardinality := property.SelectElement("Cardinality"); cardinality != nil {
@@ -59,7 +62,6 @@ func ReadXml(path string) CacheTableClass {
 		cacheTableProperty := CacheTableProperty{
 			//字段名
 			Name: property.SelectAttrValue("name", ""),
-
 			//字段类型
 			Type: property.SelectElement("Type").Text(),
 		}
@@ -71,7 +73,10 @@ func ReadXml(path string) CacheTableClass {
 		}
 		//字段描述（没有写备注的字段，取SqlFieldName或者Name）
 		if propertyDescription := property.SelectElement("Description"); propertyDescription != nil {
-			cacheTableProperty.Description = ReplaceRight(propertyDescription.Text(), "\n", "", 1)
+			propertyDesc := propertyDescription.Text()
+			propertyDesc = strings.TrimPrefix(propertyDesc, "\n")
+			propertyDesc = strings.TrimSuffix(propertyDesc, "\n")
+			cacheTableProperty.Description = propertyDesc
 		} else {
 			cacheTableProperty.Description = cacheTableProperty.SqlFieldName
 		}
