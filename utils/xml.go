@@ -11,6 +11,7 @@ type CacheTableClass struct {
 	Name         string
 	Description  string
 	ClassType    string
+	SqlRowIdName string
 	SqlTableName string
 	Property     []CacheTableProperty
 }
@@ -38,6 +39,12 @@ func ReadXml(path string) CacheTableClass {
 	//计算表名
 	cacheTableClassName := strings.Replace(cacheTableClass.Name, ".", "_", -1)
 	cacheTableClassName = ReplaceRight(cacheTableClassName, "_", ".", 1)
+	//RowID
+	if sqlRowIdName := cacheClass.SelectElement("SqlRowIdName"); sqlRowIdName != nil {
+		cacheTableClass.SqlRowIdName = sqlRowIdName.Text() //老表如 DHCMed.EPD.Epidemic 会自定义ID名称
+	} else {
+		cacheTableClass.SqlRowIdName = "ID" //新表默认使用 ID
+	}
 	cacheTableClass.SqlTableName = cacheTableClassName
 	//描述
 	if classDescription := cacheClass.SelectElement("Description"); classDescription != nil {
@@ -90,6 +97,15 @@ func ReadXml(path string) CacheTableClass {
 		}
 		cacheTableClass.Property = append(cacheTableClass.Property, cacheTableProperty)
 	}
+	//SqlRowIdName
+	idProperty := CacheTableProperty{
+		Name:         cacheTableClass.SqlRowIdName,
+		Description:  "表id唯一主键",
+		Type:         "%Integer",
+		ChineseType:  PropertyTypeToChinese("%Integer"),
+		SqlFieldName: cacheTableClass.SqlRowIdName,
+	}
+	cacheTableClass.Property = append([]CacheTableProperty{idProperty}, cacheTableClass.Property...)
 	return cacheTableClass
 }
 
@@ -101,7 +117,7 @@ func ExtractTableDesc(description string) string {
 	if len(descArr) > 1 {
 		desc = descArr[1]
 	}
-	if len(desc) >0 {
+	if len(desc) > 0 {
 		desc = strings.Replace(desc, "\n", "", -1)
 	} else {
 		desc = description

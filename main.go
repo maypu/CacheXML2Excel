@@ -47,7 +47,7 @@ func main() {
 		rowIndex := 2
 		for _, fileName := range fileNameList {
 			cacheTableClass := utils.ReadXml(fileName)
-			if len(cacheTableClass.Property)<1 {
+			if len(cacheTableClass.Property)<2 {
 				fmt.Println("找到服务类：" + cacheTableClass.Name + " 已跳过")
 				continue
 			}
@@ -80,7 +80,7 @@ func main() {
 		// 设置工作簿的默认工作表
 		f.SetActiveSheet(sheetIndex)
 		nowDateTime := time.Now().Format("20060102") + time.Now().Format("150405")
-		excelFileName := "HOS表结构整理_CacheXML2Excel_"+ nowDateTime +".xlsx"
+		excelFileName := "Cache表结构整理_CacheXML2Excel_"+ nowDateTime +".xlsx"
 		f.SetColWidth(sheetName, "A","R",20)
 		// 根据指定路径保存文件
 		if err := f.SaveAs(excelFileName); err != nil {
