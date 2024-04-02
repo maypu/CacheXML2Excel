@@ -131,23 +131,25 @@ func PropertyTypeToChinese(propertyType string) string {
 		"%Library.String":  "字符串",
 		"%Integer":         "数字",
 		"%Library.Integer": "数字",
-		"%Boolean":         "布尔",
-		"%Library.Boolean": "布尔",
+		"%Boolean":         "布尔型",
+		"%Library.Boolean": "布尔型",
 		"%Date":            "日期",
 		"%Library.Date":    "日期",
 		"%Time":            "时间",
 		"%Library.Time":    "时间",
 		"%List":            "列表",
 		"%Library.List":    "列表",
-		"%Float":           "浮点数",
-		"%Library.Float":   "浮点数",
+		"%Float":           "浮点型",
+		"%Library.Float":   "浮点型",
+		"%Numeric":         "数字",
+		"%Library.Numeric": "数字",
 	}
 	if value, isMapContainsKey := propertyTypeChinese[propertyType]; isMapContainsKey {
 		//key exist
 		return value
 	} else {
 		//key does not exist
-		if strings.Contains(propertyType, "DHC") {
+		if strings.Contains(propertyType, "DHC") || strings.Contains(propertyType, "Dr") {
 			return "指针"
 		}
 		return propertyType
